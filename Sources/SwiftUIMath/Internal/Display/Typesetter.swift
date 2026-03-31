@@ -1054,7 +1054,24 @@ extension Math {
           let display = Typesetter.createLineForMathList(
             colorboxAtom.innerList, font: font, style: style, maxWidth: maxWidth)
 
-          display!.localBackgroundColor = CGColor.fromHexString(colorboxAtom.colorString)
+          // \boxed uses sentinel color "__boxed__" — draw a border and add padding
+          // wangqi modified 2026-03-31
+          if colorboxAtom.colorString == "__boxed__" {
+            let padding = styleFont.font.size * 0.18
+            let thickness = max(0.5, styleFont.metrics.underbarRuleThickness)
+            display!.hasBorder = true
+            display!.borderThickness = thickness
+            // Expand bounds to include padding on all sides
+            display!.ascent += padding
+            display!.descent += padding
+            // Shift children right by padding so content doesn't overlap left border
+            for child in display!.children {
+              child.position.x += padding
+            }
+            display!.width += padding * 2
+          } else {
+            display!.localBackgroundColor = CGColor.fromHexString(colorboxAtom.colorString)
+          }
 
           // Check if we need to break before adding this colorbox
           let shouldBreak = shouldBreakBeforeDisplay(
@@ -2502,13 +2519,20 @@ extension Math {
         inner!.innerList, font: font, style: style, cramped: cramped, spaced: true,
         maxWidth: maxWidth)
       let axisHeight = styleFont.metrics.axisHeight
-      // delta is the max distance from the axis
-      let delta = max(innerListDisplay!.ascent - axisHeight, innerListDisplay!.descent + axisHeight)
-      let d1 = (delta / 500) * Typesetter.kDelimiterFactor  // This represents atleast 90% of the formula
-      let d2 = 2 * delta - Typesetter.kDelimiterShortfallPoints  // This represents a shortfall of 5pt
-      // The size of the delimiter glyph should cover at least 90% of the formula or
-      // be at most 5pt short.
-      let glyphHeight = max(d1, d2)
+      // Use fixed delimiter height for \big/\Big/\bigg/\Bigg, otherwise auto-size to content
+      // wangqi modified 2026-03-31
+      let glyphHeight: CGFloat
+      if let heightMultiplier = inner?.delimiterHeight {
+        glyphHeight = heightMultiplier * styleFont.font.size
+      } else {
+        // delta is the max distance from the axis
+        let delta = max(innerListDisplay!.ascent - axisHeight, innerListDisplay!.descent + axisHeight)
+        let d1 = (delta / 500) * Typesetter.kDelimiterFactor  // This represents atleast 90% of the formula
+        let d2 = 2 * delta - Typesetter.kDelimiterShortfallPoints  // This represents a shortfall of 5pt
+        // The size of the delimiter glyph should cover at least 90% of the formula or
+        // be at most 5pt short.
+        glyphHeight = max(d1, d2)
+      }
 
       var innerElements = [DisplayNode]()
       var position = CGPoint.zero

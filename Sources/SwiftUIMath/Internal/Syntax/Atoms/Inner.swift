@@ -3,6 +3,10 @@ import Foundation
 extension Math {
   final class Inner: Atom {
     var innerList: AtomList?
+    // Fixed delimiter height multiplier for \big, \Big, \bigg, \Bigg commands.
+    // When set, overrides the auto-computed height in makeLeftRight.
+    // wangqi modified 2026-03-31
+    var delimiterHeight: CGFloat?
 
     var leftBoundary: Atom? {
       didSet {
@@ -49,6 +53,8 @@ extension Math {
       self.innerList = inner.innerList.map { AtomList($0) }
       self.leftBoundary = inner.leftBoundary.map { $0.copy() }
       self.rightBoundary = inner.rightBoundary.map { $0.copy() }
+      // wangqi modified 2026-03-31
+      self.delimiterHeight = inner.delimiterHeight
 
       super.init(inner)
     }

@@ -860,6 +860,103 @@ extension Math {
           self.setError(.invalidCommand, message: errorMessage)
           return nil
         }
+      } else if command == "boxed" {
+        // \boxed{expr} draws a box around the expression
+        // wangqi modified 2026-03-31
+        let boxed = ColorBox(colorString: "__boxed__")
+        boxed.innerList = self.buildInternal(true)
+        return boxed
+      } else if let arrowNucleus = Self.xarrowCommands[command] {
+        // \xrightarrow[below]{above}, \xleftarrow[below]{above}, etc.
+        // Rendered as a LargeOperator (limits=true) so label appears above/below arrow
+        // wangqi modified 2026-03-31
+        let op = LargeOperator(limits: true)
+        op.nucleus = arrowNucleus
+        // Parse optional subscript argument [below]
+        skipSpaces()
+        if hasCharacters && string[currentCharIndex] == "[" {
+          _ = nextCharacter()  // consume '['
+          let subList = buildInternal(false, stopChar: "]")
+          op.`subscript` = subList
+        }
+        // Parse mandatory superscript argument {above}
+        op.superscript = self.buildInternal(true)
+        return op
+      } else if command == "operatorname" || command == "operatorname*" {
+        // \operatorname{name} creates a custom operator rendered upright
+        // \operatorname*{name} creates one with limits above/below in display style
+        // wangqi modified 2026-03-31
+        let hasLimits = command.hasSuffix("*")
+        let content = self.buildInternal(true)
+        var operatorName = ""
+        if let atoms = content?.atoms {
+          for atom in atoms { operatorName += atom.nucleus }
+        }
+        if operatorName.isEmpty {
+          self.setError(.invalidCommand, message: "Missing operator name for \\operatorname")
+          return nil
+        }
+        let op = LargeOperator(limits: hasLimits)
+        op.nucleus = operatorName
+        return op
+      } else if command == "bra" {
+        // Dirac bra notation: <...|
+        // wangqi modified 2026-03-31
+        let inner = Inner()
+        inner.leftBoundary = AtomFactory.boundary(forDelimiter: "<")
+        inner.rightBoundary = AtomFactory.boundary(forDelimiter: "|")
+        inner.innerList = self.buildInternal(true)
+        return inner
+      } else if command == "ket" {
+        // Dirac ket notation: |...>
+        // wangqi modified 2026-03-31
+        let inner = Inner()
+        inner.leftBoundary = AtomFactory.boundary(forDelimiter: "|")
+        inner.rightBoundary = AtomFactory.boundary(forDelimiter: ">")
+        inner.innerList = self.buildInternal(true)
+        return inner
+      } else if command == "braket" {
+        // Dirac braket notation: <...>
+        // wangqi modified 2026-03-31
+        let inner = Inner()
+        inner.leftBoundary = AtomFactory.boundary(forDelimiter: "<")
+        inner.rightBoundary = AtomFactory.boundary(forDelimiter: ">")
+        inner.innerList = self.buildInternal(true)
+        return inner
+      } else if let delimSize = Self.delimiterSizes[command] {
+        // \big, \Big, \bigg, \Bigg and their l/r/m variants
+        // wangqi modified 2026-03-31
+        // Read the delimiter character/command
+        self.skipSpaces()
+        guard self.hasCharacters else {
+          self.setError(.invalidCommand, message: "Missing delimiter after \\\(command)")
+          return nil
+        }
+        let ch = self.nextCharacter()
+        var delimStr: String
+        if ch == "\\" {
+          // Named delimiter command
+          delimStr = self.readCommand()
+        } else {
+          delimStr = String(ch)
+        }
+        guard let delimChar = AtomFactory.delimiters[delimStr] else {
+          self.setError(.invalidCommand, message: "Unknown delimiter '\(delimStr)' for \\\(command)")
+          return nil
+        }
+        let inner = Inner()
+        let isRight = command.hasSuffix("r") || command.hasSuffix("R")
+        if isRight {
+          inner.leftBoundary = AtomFactory.boundary(forDelimiter: ".")
+          let boundary = Atom(type: .boundary, nucleus: delimChar)
+          inner.rightBoundary = boundary
+        } else {
+          let boundary = Atom(type: .boundary, nucleus: delimChar)
+          inner.leftBoundary = boundary
+          inner.rightBoundary = AtomFactory.boundary(forDelimiter: ".")
+        }
+        inner.delimiterHeight = delimSize
+        return inner
       } else {
         let errorMessage = "Invalid command \\\(command)"
         self.setError(.invalidCommand, message: errorMessage)
@@ -922,6 +1019,32 @@ extension Math {
         "brace": ["{", "}"],
       ]
     }
+
+    // Extensible arrow commands: map command name to arrow nucleus character
+    // \xrightarrow[sub]{sup} etc. rendered as LargeOperator with limits
+    // wangqi modified 2026-03-31
+    private static let xarrowCommands: [String: String] = [
+      "xrightarrow": "\u{2192}",
+      "xleftarrow": "\u{2190}",
+      "xLeftarrow": "\u{21D0}",
+      "xRightarrow": "\u{21D2}",
+      "xleftrightarrow": "\u{2194}",
+      "xLeftrightarrow": "\u{21D4}",
+      "xmapsto": "\u{21A6}",
+      "xhookleftarrow": "\u{21A9}",
+      "xhookrightarrow": "\u{21AA}",
+      "xlongequal": "=",
+    ]
+
+    // Delimiter sizing commands: map to height multiplier (in font-size units)
+    // \big=0.85em, \Big=1.15em, \bigg=1.45em, \Bigg=1.75em
+    // wangqi modified 2026-03-31
+    private static let delimiterSizes: [String: CGFloat] = [
+      "big": 0.85, "Big": 1.15, "bigg": 1.45, "Bigg": 1.75,
+      "bigl": 0.85, "Bigl": 1.15, "biggl": 1.45, "Biggl": 1.75,
+      "bigr": 0.85, "Bigr": 1.15, "biggr": 1.45, "Biggr": 1.75,
+      "bigm": 0.85, "Bigm": 1.15, "biggm": 1.45, "Biggm": 1.75,
+    ]
 
     mutating func stopCommand(_ command: String, list: AtomList, stopChar: Character?) -> AtomList?
     {

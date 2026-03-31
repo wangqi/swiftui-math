@@ -51,6 +51,14 @@ extension Math {
       "rceil": "\u{2309}",
       "lfloor": "\u{230A}",
       "rfloor": "\u{230B}",
+      // Corner brackets and stacked brackets (amssymb)
+      // wangqi modified 2026-03-31
+      "ulcorner": "\u{231C}",
+      "urcorner": "\u{231D}",
+      "llcorner": "\u{231E}",
+      "lrcorner": "\u{231F}",
+      "llbracket": "\u{27E6}",
+      "rrbracket": "\u{27E7}",
     ]
 
     static let delimValueToName: [String: String] = {
@@ -83,6 +91,11 @@ extension Math {
       "vec": "\u{20D7}",
       "widehat": "\u{0302}",
       "widetilde": "\u{0303}",
+      // Arrow accents (amssymb)
+      // wangqi modified 2026-03-31
+      "overleftarrow": "\u{20D6}",
+      "overrightarrow": "\u{20D7}",
+      "overleftrightarrow": "\u{20E1}",
     ]
 
     static let accentValueToName: [String: String] = {
@@ -135,6 +148,9 @@ extension Math {
       "chi": Atom(type: .variable, nucleus: "\u{03C7}"),
       "psi": Atom(type: .variable, nucleus: "\u{03C8}"),
       "omega": Atom(type: .variable, nucleus: "\u{03C9}"),
+      // Greek variant kappa (amssymb)
+      // wangqi modified 2026-03-31
+      "varkappa": Atom(type: .variable, nucleus: "\u{03F0}"),
       // We mark the following greek chars as ordinary so that we don't try
       // to automatically italicize them as we do with variables.
       // These characters fall outside the rules of italicization that we have defined.
@@ -193,6 +209,11 @@ extension Math {
       "Longleftarrow": Atom(type: .relation, nucleus: "\u{27F8}"),
       "Longrightarrow": Atom(type: .relation, nucleus: "\u{27F9}"),
       "Longleftrightarrow": Atom(type: .relation, nucleus: "\u{27FA}"),
+      // Additional arrows (amssymb)
+      // wangqi modified 2026-03-31
+      "longmapsto": Atom(type: .relation, nucleus: "\u{27FC}"),
+      "hookrightarrow": Atom(type: .relation, nucleus: "\u{21AA}"),
+      "hookleftarrow": Atom(type: .relation, nucleus: "\u{21A9}"),
 
       // Relations
       "leq": Atom(type: .relation, nucleus: .lessEqual),
@@ -226,6 +247,75 @@ extension Math {
       "models": Atom(type: .relation, nucleus: "\u{22A7}"),
       "perp": Atom(type: .relation, nucleus: "\u{27C2}"),
       "implies": Atom(type: .relation, nucleus: "\u{27F9}"),
+      // Additional relations (amssymb)
+      // wangqi modified 2026-03-31
+      "leqslant": Atom(type: .relation, nucleus: "\u{2A7D}"),
+      "geqslant": Atom(type: .relation, nucleus: "\u{2A7E}"),
+      "preceq": Atom(type: .relation, nucleus: "\u{2AAF}"),
+      "succeq": Atom(type: .relation, nucleus: "\u{2AB0}"),
+      "vdash": Atom(type: .relation, nucleus: "\u{22A2}"),
+      "dashv": Atom(type: .relation, nucleus: "\u{22A3}"),
+      "bowtie": Atom(type: .relation, nucleus: "\u{22C8}"),
+      // Negated relations (amssymb)
+      // Inequality negations
+      "nless": Atom(type: .relation, nucleus: "\u{226E}"),
+      "ngtr": Atom(type: .relation, nucleus: "\u{226F}"),
+      "nleq": Atom(type: .relation, nucleus: "\u{2270}"),
+      "ngeq": Atom(type: .relation, nucleus: "\u{2271}"),
+      "nleqslant": Atom(type: .relation, nucleus: "\u{2A87}"),
+      "ngeqslant": Atom(type: .relation, nucleus: "\u{2A88}"),
+      "lneq": Atom(type: .relation, nucleus: "\u{2A87}"),
+      "gneq": Atom(type: .relation, nucleus: "\u{2A88}"),
+      "lneqq": Atom(type: .relation, nucleus: "\u{2268}"),
+      "gneqq": Atom(type: .relation, nucleus: "\u{2269}"),
+      "lnsim": Atom(type: .relation, nucleus: "\u{22E6}"),
+      "gnsim": Atom(type: .relation, nucleus: "\u{22E7}"),
+      "lnapprox": Atom(type: .relation, nucleus: "\u{2A89}"),
+      "gnapprox": Atom(type: .relation, nucleus: "\u{2A8A}"),
+      // Ordering negations
+      "nprec": Atom(type: .relation, nucleus: "\u{2280}"),
+      "nsucc": Atom(type: .relation, nucleus: "\u{2281}"),
+      "npreceq": Atom(type: .relation, nucleus: "\u{22E0}"),
+      "nsucceq": Atom(type: .relation, nucleus: "\u{22E1}"),
+      "precneqq": Atom(type: .relation, nucleus: "\u{2AB5}"),
+      "succneqq": Atom(type: .relation, nucleus: "\u{2AB6}"),
+      "precnsim": Atom(type: .relation, nucleus: "\u{22E8}"),
+      "succnsim": Atom(type: .relation, nucleus: "\u{22E9}"),
+      "precnapprox": Atom(type: .relation, nucleus: "\u{2AB9}"),
+      "succnapprox": Atom(type: .relation, nucleus: "\u{2ABA}"),
+      // Similarity/congruence negations
+      "nsim": Atom(type: .relation, nucleus: "\u{2241}"),
+      "ncong": Atom(type: .relation, nucleus: "\u{2247}"),
+      "nmid": Atom(type: .relation, nucleus: "\u{2224}"),
+      "nshortmid": Atom(type: .relation, nucleus: "\u{2224}"),
+      "nparallel": Atom(type: .relation, nucleus: "\u{2226}"),
+      "nshortparallel": Atom(type: .relation, nucleus: "\u{2226}"),
+      // Set relation negations
+      "nsubseteq": Atom(type: .relation, nucleus: "\u{2288}"),
+      "nsupseteq": Atom(type: .relation, nucleus: "\u{2289}"),
+      "subsetneq": Atom(type: .relation, nucleus: "\u{228A}"),
+      "supsetneq": Atom(type: .relation, nucleus: "\u{228B}"),
+      "subsetneqq": Atom(type: .relation, nucleus: "\u{2ACB}"),
+      "supsetneqq": Atom(type: .relation, nucleus: "\u{2ACC}"),
+      "varsubsetneq": Atom(type: .relation, nucleus: "\u{228A}"),
+      "varsupsetneq": Atom(type: .relation, nucleus: "\u{228B}"),
+      "varsubsetneqq": Atom(type: .relation, nucleus: "\u{2ACB}"),
+      "varsupsetneqq": Atom(type: .relation, nucleus: "\u{2ACC}"),
+      "notni": Atom(type: .relation, nucleus: "\u{220C}"),
+      "nni": Atom(type: .relation, nucleus: "\u{220C}"),
+      // Triangle negations
+      "ntriangleleft": Atom(type: .relation, nucleus: "\u{22EA}"),
+      "ntriangleright": Atom(type: .relation, nucleus: "\u{22EB}"),
+      "ntrianglelefteq": Atom(type: .relation, nucleus: "\u{22EC}"),
+      "ntrianglerighteq": Atom(type: .relation, nucleus: "\u{22ED}"),
+      // Turnstile negations
+      "nvdash": Atom(type: .relation, nucleus: "\u{22AC}"),
+      "nvDash": Atom(type: .relation, nucleus: "\u{22AD}"),
+      "nVdash": Atom(type: .relation, nucleus: "\u{22AE}"),
+      "nVDash": Atom(type: .relation, nucleus: "\u{22AF}"),
+      // Square subset negations
+      "nsqsubseteq": Atom(type: .relation, nucleus: "\u{22E2}"),
+      "nsqsupseteq": Atom(type: .relation, nucleus: "\u{22E3}"),
 
       // operators
       "times": times(),
@@ -254,6 +344,31 @@ extension Math {
       "star": Atom(type: .binaryOperator, nucleus: "\u{22C6}"),
       "cdot": Atom(type: .binaryOperator, nucleus: "\u{22C5}"),
       "amalg": Atom(type: .binaryOperator, nucleus: "\u{2A3F}"),
+      // Additional binary operators (amssymb)
+      // wangqi modified 2026-03-31
+      "diamond": Atom(type: .binaryOperator, nucleus: "\u{22C4}"),
+      "ltimes": Atom(type: .binaryOperator, nucleus: "\u{22C9}"),
+      "rtimes": Atom(type: .binaryOperator, nucleus: "\u{22CA}"),
+      "circledast": Atom(type: .binaryOperator, nucleus: "\u{229B}"),
+      "circledcirc": Atom(type: .binaryOperator, nucleus: "\u{229A}"),
+      "circleddash": Atom(type: .binaryOperator, nucleus: "\u{229D}"),
+      "boxdot": Atom(type: .binaryOperator, nucleus: "\u{22A1}"),
+      "boxminus": Atom(type: .binaryOperator, nucleus: "\u{229F}"),
+      "boxplus": Atom(type: .binaryOperator, nucleus: "\u{229E}"),
+      "boxtimes": Atom(type: .binaryOperator, nucleus: "\u{22A0}"),
+      "divideontimes": Atom(type: .binaryOperator, nucleus: "\u{22C7}"),
+      "dotplus": Atom(type: .binaryOperator, nucleus: "\u{2214}"),
+      "lhd": Atom(type: .binaryOperator, nucleus: "\u{22B2}"),
+      "rhd": Atom(type: .binaryOperator, nucleus: "\u{22B3}"),
+      "unlhd": Atom(type: .binaryOperator, nucleus: "\u{22B4}"),
+      "unrhd": Atom(type: .binaryOperator, nucleus: "\u{22B5}"),
+      "intercal": Atom(type: .binaryOperator, nucleus: "\u{22BA}"),
+      "barwedge": Atom(type: .binaryOperator, nucleus: "\u{22BC}"),
+      "veebar": Atom(type: .binaryOperator, nucleus: "\u{22BB}"),
+      "curlywedge": Atom(type: .binaryOperator, nucleus: "\u{22CF}"),
+      "curlyvee": Atom(type: .binaryOperator, nucleus: "\u{22CE}"),
+      "doublebarwedge": Atom(type: .binaryOperator, nucleus: "\u{2A5E}"),
+      "centerdot": Atom(type: .binaryOperator, nucleus: "\u{22C5}"),
 
       // No limit operators
       "log": operatorWithName("log", limits: false),
@@ -279,6 +394,19 @@ extension Math {
       "exp": operatorWithName("exp", limits: false),
       "deg": operatorWithName("deg", limits: false),
       "mod": operatorWithName("mod", limits: false),
+      // Additional hyperbolic/trig inverse operators (amssymb)
+      // wangqi modified 2026-03-31
+      "arccot": operatorWithName("arccot", limits: false),
+      "arcsec": operatorWithName("arcsec", limits: false),
+      "arccsc": operatorWithName("arccsc", limits: false),
+      "sech": operatorWithName("sech", limits: false),
+      "csch": operatorWithName("csch", limits: false),
+      "arcsinh": operatorWithName("arcsinh", limits: false),
+      "arccosh": operatorWithName("arccosh", limits: false),
+      "arctanh": operatorWithName("arctanh", limits: false),
+      "arccoth": operatorWithName("arccoth", limits: false),
+      "arcsech": operatorWithName("arcsech", limits: false),
+      "arccsch": operatorWithName("arccsch", limits: false),
 
       // Limit operators
       "lim": operatorWithName("lim", limits: true),
@@ -353,6 +481,15 @@ extension Math {
       "Re": Atom(type: .ordinary, nucleus: "\u{211C}"),
       "mho": Atom(type: .ordinary, nucleus: "\u{2127}"),
       "aleph": Atom(type: .ordinary, nucleus: "\u{2135}"),
+      // Hebrew letter symbols (amssymb)
+      // wangqi modified 2026-03-31
+      "beth": Atom(type: .ordinary, nucleus: "\u{2136}"),
+      "gimel": Atom(type: .ordinary, nucleus: "\u{2137}"),
+      "daleth": Atom(type: .ordinary, nucleus: "\u{2138}"),
+      // Miscellaneous symbols (amssymb)
+      "varnothing": Atom(type: .ordinary, nucleus: "\u{2205}"),
+      "measuredangle": Atom(type: .ordinary, nucleus: "\u{2221}"),
+      "Box": Atom(type: .ordinary, nucleus: "\u{25A1}"),
       "forall": Atom(type: .ordinary, nucleus: "\u{2200}"),
       "exists": Atom(type: .ordinary, nucleus: "\u{2203}"),
       "nexists": Atom(type: .ordinary, nucleus: "\u{2204}"),
@@ -439,6 +576,9 @@ extension Math {
       "mathbb": .blackboard,
       "mathbfit": .boldItalic,
       "bm": .boldItalic,
+      // boldsymbol alias for bold italic (amssymb)
+      // wangqi modified 2026-03-31
+      "boldsymbol": .boldItalic,
       "text": .roman,
     ]
 

@@ -41,6 +41,22 @@ extension CGContext {
     translateBy(x: list.position.x, y: list.position.y)
     textPosition = .zero
 
+    // Draw border rect for \boxed (after translate so coords are list-local)
+    // wangqi modified 2026-03-31
+    if list.hasBorder {
+      saveGState()
+      setStrokeColor(foregroundColor)
+      setLineWidth(list.borderThickness)
+      let rect = CGRect(
+        x: 0,
+        y: -list.descent,
+        width: list.width,
+        height: list.ascent + list.descent
+      )
+      stroke(rect)
+      restoreGState()
+    }
+
     for child in list.children {
       draw(child, foregroundColor: foregroundColor)
     }

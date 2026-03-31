@@ -12,6 +12,10 @@ extension Math {
     var linePosition: LinePosition = .regular
     var children: [DisplayNode] = []
     var index: Int = NSNotFound
+    // When true, a border rect is drawn around this list (used by \boxed)
+    // wangqi modified 2026-03-31
+    var hasBorder: Bool = false
+    var borderThickness: CGFloat = 0.5
 
     init(children: [DisplayNode], range: NSRange) {
       super.init()
